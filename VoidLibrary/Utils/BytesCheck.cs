@@ -142,27 +142,49 @@ namespace VoidLibrary.Utils
             }
         }
 
-         /// <summary>
-         /// CRC效验
-         /// </summary>
-         /// <param name="pucFrame">效验数据</param>
-         /// <param name="usLen">数据长度</param>
-         /// <returns>效验结果</returns>
-         public static int Crc16(byte[] pucFrame, int usLen)
-         {
-             int i = 0;
-             byte ucCRCHi = 0xFF;
-             byte ucCRCLo = 0xFF;
-             UInt16 iIndex = 0x0000;
- 
-             while (usLen-- > 0)
-             {
-                 iIndex = (UInt16)(ucCRCLo ^ pucFrame[i++]);
-                 ucCRCLo = (byte)(ucCRCHi ^ CRCHigh[iIndex]);
-                 ucCRCHi = CRCLow[iIndex];
-             }
-             return (ucCRCHi << 8 | ucCRCLo);
-         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pucFrame"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static int Crc16(byte[] pucFrame, int startIndex, int count)
+        {
+            int i = startIndex;
+            byte ucCRCHi = 0xFF;
+            byte ucCRCLo = 0xFF;
+            UInt16 iIndex = 0x0000;
+
+            while (count-- > 0)
+            {
+                iIndex = (UInt16)(ucCRCLo ^ pucFrame[i++]);
+                ucCRCLo = (byte)(ucCRCHi ^ CRCHigh[iIndex]);
+                ucCRCHi = CRCLow[iIndex];
+            }
+            return (ucCRCHi << 8 | ucCRCLo);
+        }
+
+        /// <summary>
+        /// CRC效验
+        /// </summary>
+        /// <param name="pucFrame">效验数据</param>
+        /// <param name="usLen">数据长度</param>
+        /// <returns>效验结果</returns>
+        public static int Crc16(byte[] pucFrame, int usLen)
+        {
+            return Crc16(pucFrame, 0, usLen);
+        }
+
+        public static bool Crc16Success(byte[] pucFrame, int startIndex, int usLen)
+        {
+            return Crc16(pucFrame, startIndex, usLen) == 0;
+        }
+
+        public static bool Crc16Success(byte[] pucFrame, int usLen)
+        {
+            return Crc16(pucFrame, 0, usLen) == 0;
+        }
 
          /// <summary>
          /// CRC效验

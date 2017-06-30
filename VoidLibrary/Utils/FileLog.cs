@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace VoidLibrary.Utils
         INFO = 3
     }
 
-    class FileLog
+    public class FileLog
     {
         private static FileLog instance = new FileLog();
 
@@ -88,5 +89,32 @@ namespace VoidLibrary.Utils
                 Console.WriteLine(e.Message);
             }
         }
+
+        public static void F()
+        {
+            // StackTrace st = new StackTrace(new StackFrame(true));
+            StackTrace st = new StackTrace(true);
+            StackFrame sf = st.GetFrame(1);
+            Console.WriteLine("File: {0}, Method: {1}, Line Number: {2}", sf.GetFileName(), sf.GetMethod().Name, sf.GetFileLineNumber());
+        }
+
+        public static string GetExceptionMsg(Exception ex)
+        {
+            // StackTrace trace = new StackTrace(ex, true);
+            // StackFrame frame = trace.GetFrame(0);
+            StringBuilder msgBuilder = new StringBuilder();
+            msgBuilder.Append("异常信息：").Append(ex.Message).Append("\n\t");
+            msgBuilder.Append("异常类型：").Append(ex.GetType().Name).Append("\n\t");
+            msgBuilder.Append("异常对象：").Append(ex.Source).Append("\n\t");
+            msgBuilder.Append("调用堆栈：").Append(ex.StackTrace.Trim()).Append("\n\t");
+            msgBuilder.Append("触发方法：").Append(ex.TargetSite).Append("");
+            return msgBuilder.ToString();
+        }
+
+        public static void WritetExceptionMsg(Exception ex)
+        {
+            FileLog.WriteE(GetExceptionMsg(ex));
+        }
+
     }
 }

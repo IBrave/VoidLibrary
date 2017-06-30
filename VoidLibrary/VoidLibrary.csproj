@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,12 +53,15 @@
     <Compile Include="Devices\DeviceRelay.cs" />
     <Compile Include="Devices\DeviceRM3545.cs" />
     <Compile Include="Devices\DeviceSHT15.cs" />
+    <Compile Include="Devices\DeviceSMOWOMIC3A.cs" />
     <Compile Include="Devices\DeviceSource.cs" />
     <Compile Include="Devices\DeviceWT1800.cs" />
     <Compile Include="Drivers\Connection.cs" />
     <Compile Include="Drivers\Driver.cs" />
     <Compile Include="Drivers\NetDriver.cs" />
     <Compile Include="Drivers\SerialPortDriver.cs" />
+    <Compile Include="Helper\AppExceptionHelper.cs" />
+    <Compile Include="Helper\AppSingleHelper.cs" />
     <Compile Include="Helper\Crc.cs" />
     <Compile Include="Helper\HexStringConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
