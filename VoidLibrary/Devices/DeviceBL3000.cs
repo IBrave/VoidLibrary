@@ -29,14 +29,7 @@ namespace VoidLibrary.Devices
         public override bool Open()
         {
             bool isOpen = base.Open();
-            if (isOpen)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return isOpen;
         }
 
         public override bool Close()

@@ -68,36 +68,6 @@ namespace MotorTest.Devices
             }
             return resultList.ToArray();
         }
-        //public virtual byte[] SendAndRead(byte[] data)
-        //{
-        //    return SendAndRead(data, 1);
-        //}
-        //public virtual byte[] SendAndRead(byte[] data, int count)
-        //{
-        //    if (this.driver == null || data == null || count < 1)
-        //        return null;
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        this.driver.ClearInBuffer();
-        //        this.Send(data, 1);
-        //        byte[] response = this.Read();
-        //        if (response != null)
-        //        {
-        //            return response;
-        //        }
-        //    }
-        //    return null;
-        //}
-        //public virtual byte[] SendAndRead(string data)
-        //{
-        //    return this.SendAndRead(data, 1);
-        //}
-        //public virtual byte[] SendAndRead(string data, int count)
-        //{
-        //    if (string.IsNullOrEmpty(data) || count < 1)
-        //        return null;
-        //    byte[] dataBytes = BytesCheck.GetCRC16Full(BytesCheck.strToHexByte(data), true);
-        //    return this.SendAndRead(dataBytes, count);
-        //}
+
     }
 }

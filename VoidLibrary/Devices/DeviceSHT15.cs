@@ -9,19 +9,27 @@ using VoidLibrary.Utils;
 
 namespace VoidLibrary.Devices
 {
+    /// <summary>
+    /// 温湿度大气压
+    /// </summary>
     public class DeviceSHT15 : Device
     {
-        string cmdSendDataToDeviceSHT15 = "010400000003"; 
+        string CMD_READ = "010400000003";
         int defaultWaitTimeMilliSeconds = 500;
+
+        private const int ReadParamsNum = 3;
+
         public DeviceSHT15(string name)
             : base(name)
         {
             this.name = name;
         }
+
         public override bool Register()
         {
             return base.Register();
         }
+
         public override bool Open()
         {
             bool isOpen = base.Open();
@@ -34,6 +42,7 @@ namespace VoidLibrary.Devices
                 return false;
             }
         }
+
         public override bool Close()
         {
             bool isClose = base.Close();
@@ -48,8 +57,6 @@ namespace VoidLibrary.Devices
 
         }
 
-        private const int ReadParamsNum = 3;
-
         public double [] SendAndRead()
         {
             byte[] result = null;
@@ -59,7 +66,7 @@ namespace VoidLibrary.Devices
             {
                 this.driver.ClearInBuffer();
                 this.driver.ClearOutBuffer();
-                byte[] cmd = HexStringConverter.StrToHexByte(cmdSendDataToDeviceSHT15);
+                byte[] cmd = HexStringConverter.StrToHexByte(CMD_READ);
                 byte[] cmdWithCRC16 = BytesCheck.GetCRC16Full(cmd, true);
                 this.driver.Send(cmdWithCRC16);
                 result = this.ReadWait(defaultWaitTimeMilliSeconds);
@@ -97,8 +104,6 @@ namespace VoidLibrary.Devices
             double atmValue = ((result[frameHeadIndex + 7] & 0XFF) * 256 + result[frameHeadIndex + 8] & 0XFF) / 10.0;
 
             return new double[] { tempValue, humValue, atmValue };
-
-          
         }
 
         public double ParseSingleTypeValue(byte[] values, int startIndex, int count)
