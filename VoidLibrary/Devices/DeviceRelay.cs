@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
+using System.Threading;
+#if FRAMEWORK4_0
 using System.Threading.Tasks;
+#endif
 
 namespace MotorTest.Devices
 {
@@ -77,7 +79,14 @@ namespace MotorTest.Devices
         }
         public void AsyncStart(int id)
         {
+#if FRAMEWORK4_0
             Task.Factory.StartNew(() => Start(id));
+#else
+            ThreadPool.QueueUserWorkItem((state0) =>
+            {
+                Start(id);
+            });
+#endif
         }
         public bool Stop()
         {

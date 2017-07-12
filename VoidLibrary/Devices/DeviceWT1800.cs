@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using TmctlAPINet;
+#if FRAMEWORK4_0
+using System.Linq;
+using System.Threading.Tasks;
+#endif
 
 namespace MotorTest.Devices
 {
@@ -228,12 +230,27 @@ namespace MotorTest.Devices
         }
         public bool AsyncSetCTScaleRatio(double ratio)
         {
+#if FRAMEWORK4_0
             Task.Factory.StartNew(() => SetCTScaleRatio(ratio));
+#else
+            ThreadPool.QueueUserWorkItem((state0) =>
+            {
+                SetCTScaleRatio(ratio);
+            });
+#endif
             return true;
         }
         public bool AsyncSetTorqueScaleRatio(double ratio)
         {
+
+#if FRAMEWORK4_0
             Task.Factory.StartNew(() => SetTorqueScaleRatio(ratio));
+#else
+            ThreadPool.QueueUserWorkItem((state0) =>
+            {
+                AsyncSetTorqueScaleRatio(ratio);
+            });
+#endif
             return true;
         }
         public override bool Close()
@@ -258,7 +275,11 @@ namespace MotorTest.Devices
                 return null;
             }
             data = CutLeft("\n", ref data);
+#if FRAMEWORK4_0
             List<string> result = data.Split(',').ToList();
+#else
+            List<string> result = new List<string>(data.Split(','));
+#endif
             return result;
         }
 

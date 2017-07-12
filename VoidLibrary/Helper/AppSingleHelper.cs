@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+#if FRAMEWORK4_0
+using System.Linq;
+#endif
 
 namespace HarmfulGasMonitoring
 {
@@ -53,10 +54,20 @@ namespace HarmfulGasMonitoring
 
         public static bool HadStartedAppAndShowForeground()
         {
-            String thisprocessname = Process.GetCurrentProcess().ProcessName;
+            String thisProcessName = Process.GetCurrentProcess().ProcessName;
 
-            if (Process.GetProcesses().Count(p => p.ProcessName == thisprocessname) > 1)
+#if FRAMEWORK4_0
+            if (Process.GetProcesses().Count(p => p.ProcessName == thisProcessName) > 1)
             {
+#else
+            Process[] processes = Process.GetProcesses();
+            for (int i = processes.Length - 1; i >= 0; ++i)
+            {
+                if (processes[i].ProcessName != thisProcessName)
+                {
+                    continue;
+                }
+#endif
                 Process instance = GetExistProcess();
                 if (instance != null)
                 {

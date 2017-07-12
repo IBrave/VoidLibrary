@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+#if FRAMEWORK4_0
 using System.Linq;
+#endif
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace MotorTest.Devices
 {
@@ -52,7 +53,11 @@ namespace MotorTest.Devices
                     byte[] data = this.driver.Read();
                     if (data != null && data.Length != 0)
                     {
+#if FRAMEWORK4_0
                         resultList.AddRange(data.ToList());
+#else
+                        resultList.AddRange(data);
+#endif
                     }
                     Thread.Sleep(10);
                     ts = DateTime.Now - dtStart;

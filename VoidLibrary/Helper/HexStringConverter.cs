@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+#if FRAMEWORK4_0
 using System.Linq;
+#endif
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MotorTest
 {
@@ -22,7 +23,11 @@ namespace MotorTest
         {
             byte[] result = StrToHexByte(hexString);
             int crcResult = Crc.Crc16(result, result.Length);
+#if FRAMEWORK4_0
             List<byte> resultList = result.ToList();
+#else
+            List<byte> resultList = new List<byte>(result);
+#endif
             resultList.Add((byte)(crcResult));
             resultList.Add((byte)(crcResult >> 8));
             result = resultList.ToArray();

@@ -2,10 +2,11 @@
 using MotorTest.Devices;
 using System;
 using System.Collections.Generic;
+#if FRAMEWORK4_0
 using System.Linq;
+#endif
 using System.Text;
 using VoidLibrary.Utils;
-using System.Threading.Tasks;
 
 namespace VoidLibrary.Devices
 {
@@ -194,7 +195,15 @@ namespace VoidLibrary.Devices
 
         private double ParseSingleTypeValue(byte[] values, int startIndex, int count)
         {
+#if FRAMEWORK4_0
             byte[] org_params = values.Skip(startIndex).Take(count).ToArray();
+#else
+            byte[] org_params = new byte[count];
+            while (--count >= 0)
+            {
+                org_params[count] = values[startIndex + count];
+            }
+#endif
             Array.Reverse(org_params);
             return BitConverter.ToSingle(org_params, 0);
         }
