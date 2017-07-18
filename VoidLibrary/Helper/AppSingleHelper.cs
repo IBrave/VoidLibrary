@@ -60,10 +60,15 @@ namespace HarmfulGasMonitoring
             if (Process.GetProcesses().Count(p => p.ProcessName == thisProcessName) > 1)
             {
 #else
+			int countNum = 0;
             Process[] processes = Process.GetProcesses();
-            for (int i = processes.Length - 1; i >= 0; ++i)
+            for (int i = processes.Length - 1; i >= 0; --i)
             {
                 if (processes[i].ProcessName != thisProcessName)
+                {
+                    continue;
+                }
+				if (countNum++ < 1)
                 {
                     continue;
                 }
