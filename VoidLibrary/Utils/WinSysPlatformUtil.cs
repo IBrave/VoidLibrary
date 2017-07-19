@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EcovacsTest.Void.Util
+namespace VoidLibrary.Utils
 {
     public class WinSysPlatformUtil
     {
@@ -26,6 +26,7 @@ namespace EcovacsTest.Void.Util
         {
             SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
         }
+
         //允许睡醒和休眠
         public static void EnableStandby()
         {

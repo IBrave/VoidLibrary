@@ -45,6 +45,18 @@ namespace MotorTest
             }
             return returnStr;
         }
+
+        public static string ByteToHexString(byte[] data)
+        {
+            return ByteToHexString(data, " ");
+        }
+
+        public static string ByteToHexString(byte[] data, string separated)
+        {
+            string hex = BitConverter.ToString(data).Replace("-", separated);
+            return hex;
+        }
+
         public static string ByteToHexStr(List<byte> data)
         {
             if (data == null)

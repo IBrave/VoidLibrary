@@ -50,7 +50,7 @@ namespace VoidLibrary.Devices
             this.driver.ClearInBuffer();
             this.driver.ClearOutBuffer();
             byte[] cmd = HexStringConverter.StrToHexByte(strCmd);
-            byte[] cmdWithCRC16 = BytesCheck.GetCRC16Full(cmd, true);
+            byte[] cmdWithCRC16 = CrcUtil.GetCRC16Full(cmd, true);
 
             return cmdWithCRC16;
         }

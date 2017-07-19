@@ -10,7 +10,7 @@ namespace VoidLibrary.Utils
     /*---------------yyzq.net--------------------------*/
     /*---------------tczhuoyou.com---------------------*
     /*任何个人均可免费修改，使用本程序，但请保留以上作者信息，谢谢！*/
-    internal static class BytesCheck
+    internal static class CrcUtil
     {
         #region 校验和计算
         /// <summary>
