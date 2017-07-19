@@ -89,7 +89,7 @@ namespace ElecParamsServer.Helper
 
         public override DbParameter CreateParameter(string key, object value, DbType type)
         {
-            DbParameter parameter = new MySqlParameter(key, type);
+            DbParameter parameter = new MySqlParameter(key, DbTypeToMySqlDbType(type));
             parameter.Value = value;
             return parameter;
         }
@@ -103,6 +103,48 @@ namespace ElecParamsServer.Helper
             }
 
             return mySqlParameters;
+        }
+
+        private MySqlDbType DbTypeToMySqlDbType(DbType type)
+        {
+            MySqlDbType mySqlDbType = MySqlDbType.Int64;
+            switch(type)
+            {
+                case DbType.Binary:
+                    mySqlDbType = MySqlDbType.Binary;
+                    break;
+                case DbType.Boolean:
+                    break;
+                case DbType.String:
+                    mySqlDbType = MySqlDbType.String;
+                    break;
+                case DbType.UInt64:
+                    mySqlDbType = MySqlDbType.UInt64;
+                    break;
+                case DbType.UInt32:
+                    mySqlDbType = MySqlDbType.UInt32;
+                    break;
+                case DbType.UInt16:
+                    mySqlDbType = MySqlDbType.UInt16;
+                    break;
+                case DbType.Int64:
+                    mySqlDbType = MySqlDbType.Int64;
+                    break;
+                case DbType.Int32:
+                    mySqlDbType = MySqlDbType.Int32;
+                    break;
+                case DbType.Int16:
+                    mySqlDbType = MySqlDbType.Int16;
+                    break;
+                case DbType.Double:
+                    mySqlDbType = MySqlDbType.Double;
+                    break;
+                case DbType.Decimal:
+                    mySqlDbType = MySqlDbType.Decimal;
+                    break;
+            }
+
+            return mySqlDbType;
         }
 
     }
