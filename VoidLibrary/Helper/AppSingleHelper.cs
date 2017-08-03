@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Linq;
 #endif
 
-namespace HarmfulGasMonitoring
+namespace VoidLibrary
 {
     public class AppSingleHelper
     {

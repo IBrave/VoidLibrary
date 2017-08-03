@@ -8,14 +8,23 @@ namespace VoidDBLibrary
 {
     public class VoidDbHelper
     {
+        public static VoidDbHelper Instance;
+
+        public virtual void Create(string fileNameNoExtension)
+        {
+        }
 
         public virtual void Open()
         {
         }
 
-        public virtual void ExecuteNonQuery(string sql)
+        public virtual void Close()
         {
+        }
 
+        public virtual int ExecuteNonQuery(string sql)
+        {
+            return -1;
         }
 
         public virtual int ExecuteNonQuery(string commandText, params DbParameter[] parameters)

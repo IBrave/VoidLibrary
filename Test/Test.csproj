@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VoidAttribute\StatementAttribute.cs" />
+    <Compile Include="Model\Column.cs" />
+    <Compile Include="Model\Entity.cs" />
+    <Compile Include="VoidAttribute\OrderAttribute.cs" />
+    <Compile Include="Model\TypeTestEntity.cs" />
+    <Compile Include="Model\EntityDao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

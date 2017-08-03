@@ -15,6 +15,11 @@ namespace ElecParamsServer.Helper
         private string DatabaseName;
         private string connectionString;
 
+        public VoidMySqlHelper()
+        {
+            Instance = this;
+        }
+
         public void InitDB()
         {
             DBConfig mySqlConfig = new DBConfig();
@@ -96,7 +101,7 @@ namespace ElecParamsServer.Helper
 
         private MySqlParameter[] CastToMySqlParameter(DbParameter[] parameters)
         {
-            MySqlParameter[] mySqlParameters = new MySqlParameter[parameters.Length];
+            MySqlParameter[] mySqlParameters = new MySqlParameter[parameters == null ? 0 : parameters.Length];
             for (int i = parameters.Length - 1; i >= 0; --i)
             {
                 mySqlParameters[i] = (MySqlParameter)parameters[i];

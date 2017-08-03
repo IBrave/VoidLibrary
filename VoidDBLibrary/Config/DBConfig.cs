@@ -45,9 +45,10 @@ namespace VoidDBLibrary.Config
                 string[] values = Instance.GetStrArray(KEY_SQLITE3_CONFIG, new string[0]);
                 if (values.Length == 1)
                 {
-                    Sqlite3Config = new string[] {
+                    values = new string[] {
                         KEY_SERVER_NAME, KEY_PORT_NAME, KEY_UID_NAME, KEY_PWD_NAME, KEY_DATABASE_NAME, KEY_DATABASE_STORAGE_DIR
                     };
+                    Sqlite3Config = values;
                 }
                 return values;
             }

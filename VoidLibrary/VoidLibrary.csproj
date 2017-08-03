@@ -53,6 +53,7 @@
     <Compile Include="Devices\DeviceEP3015.cs" />
     <Compile Include="Devices\DeviceFluke8846A.cs" />
     <Compile Include="Devices\DeviceGM10.cs" />
+    <Compile Include="Devices\DeviceKlotzLDS328.cs" />
     <Compile Include="Devices\DeviceModbusRTU.cs" />
     <Compile Include="Devices\DeviceRelay.cs" />
     <Compile Include="Devices\DeviceRM3545.cs" />

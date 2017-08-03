@@ -22,9 +22,9 @@ namespace VoidDBLibrary
             set { connection = value; }
         }
 
-        public VoidSqlite3Helper(string fileNameNoExtension)
+        public VoidSqlite3Helper()
         {
-            connection = CreateConnection(fileNameNoExtension);
+            Instance = this;
         }
 
         public static SQLiteConnection CreateConnection(string fileNameNoExtension)
@@ -37,9 +37,32 @@ namespace VoidDBLibrary
                 Directory.CreateDirectory(db_dir);
             }
             string dbPath = Path.Combine(db_dir, fileNameNoExtension + ".rec");
-            SQLiteConnection.CreateFile(dbPath);
+            if (!File.Exists(dbPath))
+            {
+                SQLiteConnection.CreateFile(dbPath);
+            }
 
             return new SQLiteConnection(string.Format("Data Source={0};Version=3;", dbPath));
+        }
+
+        public Object Begin()
+        {
+            return connection.BeginTransaction();
+        }
+
+        public void Commit(object obj)
+        {
+            ((SQLiteTransaction)obj).Commit();
+        }
+
+        public void Rollback(object obj)
+        {
+            ((SQLiteTransaction)obj).Rollback();
+        }
+
+        public override void Create(string fileNameNoExtension)
+        {
+            connection = CreateConnection(fileNameNoExtension);
         }
 
         public override void Open()
@@ -47,23 +70,54 @@ namespace VoidDBLibrary
             connection.Open();
         }
 
-        public override void ExecuteNonQuery(string sql)
+        public override void Close()
         {
-            SQLiteCommand command = new SQLiteCommand(sql, (SQLiteConnection)connection);
-            command.ExecuteNonQuery();
+            SQLiteConnection connection = this.connection;
+            if (connection == null)
+            {
+                return;
+            }
+
+            try
+            {
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                FileLog.WriteE(e.ToString());
+            }
+        }
+
+        public override int ExecuteNonQuery(string sql)
+        {
+            int result = 0;
+
+            DbTransaction trans = connection.BeginTransaction();
+            try
+            {
+                SQLiteCommand command = new SQLiteCommand(sql, (SQLiteConnection)connection);
+                result = command.ExecuteNonQuery();
+                trans.Commit();
+            } catch (Exception ex)
+            {
+                trans.Rollback();
+                throw ex;
+            }
+
+            return result;
         }
 
         public override int ExecuteNonQuery(string commandText, params DbParameter[] parameters)
         {
+            /*
             int affectedRows = 0;
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
+                DbTransaction trans = connection.BeginTransaction();
                 try
                 {
-                    DbTransaction trans = connection.BeginTransaction();
-
                     command.CommandText = commandText;
-                    if (parameters.Length != 0)
+                    if (parameters !=null && parameters.Length != 0)
                     {
                         command.Parameters.AddRange(parameters);
                     }
@@ -73,6 +127,31 @@ namespace VoidDBLibrary
                 }
                 catch (Exception e)
                 {
+                    trans.Rollback();
+                    FileLog.WriteE(e.ToString());
+                    throw e;
+                }
+            }
+            return affectedRows;
+             * */
+            int affectedRows = 0;
+            SQLiteCommand command = new SQLiteCommand(connection);
+            {
+                //DbTransaction trans = connection.BeginTransaction();
+                try
+                {
+                    command.CommandText = commandText;
+                    if (parameters != null && parameters.Length != 0)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+                    affectedRows = command.ExecuteNonQuery();
+
+                    //trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    //trans.Rollback();
                     FileLog.WriteE(e.ToString());
                     throw e;
                 }
@@ -94,7 +173,7 @@ namespace VoidDBLibrary
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
                 command.CommandText = commandText;
-                if (parameters.Length != 0)
+                if (parameters != null && parameters.Length != 0)
                 {
                     command.Parameters.AddRange(parameters);
                 }
