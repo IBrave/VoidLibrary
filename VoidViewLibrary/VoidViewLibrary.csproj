@@ -48,17 +48,38 @@
     <Compile Include="Controller\ViewLayoutController.cs" />
     <Compile Include="Controller\WatchTextController.cs" />
     <Compile Include="Entity\ViewLayoutObj.cs" />
+    <Compile Include="Progress\LoadingProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Progress\LoadingProgress.designer.cs">
+      <DependentUpon>LoadingProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\Helper\DrawRotateCircleHelper.cs" />
+    <Compile Include="View\Helper\EdgeShadowHelper.cs" />
+    <Compile Include="View\Helper\MoveControlAtParentControlHelper.cs" />
     <Compile Include="View\PopupWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="View\PopupWindow.Designer.cs">
       <DependentUpon>PopupWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Progress\IndeterminateProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Progress\IndeterminateProgress.designer.cs">
+      <DependentUpon>IndeterminateProgress.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Progress\LoadingProgress.resx">
+      <DependentUpon>LoadingProgress.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\PopupWindow.resx">
       <DependentUpon>PopupWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Progress\IndeterminateProgress.resx">
+      <DependentUpon>IndeterminateProgress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
