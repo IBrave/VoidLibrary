@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoidDBLibrary", "VoidDBLibrary\VoidDBLibrary.csproj", "{CE976677-CC38-4DA0-BAE0-79BBBBD25B7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{4FDDABEA-B2E5-457E-9F95-C36526665835}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoidViewLibrary", "VoidViewLibrary\VoidViewLibrary.csproj", "{E932C753-1CE3-4993-837E-EEAF2864DA96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{CE976677-CC38-4DA0-BAE0-79BBBBD25B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE976677-CC38-4DA0-BAE0-79BBBBD25B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE976677-CC38-4DA0-BAE0-79BBBBD25B7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FDDABEA-B2E5-457E-9F95-C36526665835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FDDABEA-B2E5-457E-9F95-C36526665835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FDDABEA-B2E5-457E-9F95-C36526665835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FDDABEA-B2E5-457E-9F95-C36526665835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E932C753-1CE3-4993-837E-EEAF2864DA96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E932C753-1CE3-4993-837E-EEAF2864DA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E932C753-1CE3-4993-837E-EEAF2864DA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E932C753-1CE3-4993-837E-EEAF2864DA96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

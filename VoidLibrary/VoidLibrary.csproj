@@ -77,6 +77,7 @@
     <Compile Include="Utils\FileLog.cs" />
     <Compile Include="Utils\SharedPreferencesImpl.cs" />
     <Compile Include="Utils\Storage\SharedPreferences.cs" />
+    <Compile Include="Utils\Concurrent\TimeoutUtil.cs" />
     <Compile Include="Utils\WinSysUtil.cs" />
     <Compile Include="Utils\WinSysPlatformUtil.cs" />
   </ItemGroup>
