@@ -48,7 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\Device.cs" />
+    <Compile Include="Devices\DeviceABB.cs" />
     <Compile Include="Devices\DeviceAinuo.cs" />
+    <Compile Include="Devices\DeviceMinilab312.cs" />
+    <Compile Include="Devices\DeviceTopasLap321.cs" />
     <Compile Include="Devices\DeviceBL3000.cs" />
     <Compile Include="Devices\DeviceEP3015.cs" />
     <Compile Include="Devices\DeviceFluke8846A.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="Utils\CrcUtil.cs" />
     <Compile Include="Utils\FileUtil.cs" />
     <Compile Include="Utils\FileLog.cs" />
+    <Compile Include="Utils\LRC.cs" />
     <Compile Include="Utils\SharedPreferencesImpl.cs" />
     <Compile Include="Utils\Storage\SharedPreferences.cs" />
     <Compile Include="Utils\Concurrent\TimeoutUtil.cs" />

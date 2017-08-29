@@ -10,11 +10,14 @@ namespace MotorTest.Drivers
     {
         public const string PortName = "PortName";
         public const string BaudRate = "BaudRate";
+        public const string StopBits = "StopBits";
 
         SerialPort serialPortInstance;
         const float minWaitSeconds = 0.1f;
         string portName = string.Empty;
         int bandRate = 0;
+        int stopBits = 1;
+
         public SerialPortDriver(string name)
         {
             this.name = name;
@@ -139,6 +142,15 @@ namespace MotorTest.Drivers
                         if (Int32.TryParse(paraValue, out this.bandRate) == true)
                         {
                             this.serialPortInstance.BaudRate = this.bandRate;
+                            result = true;
+                        }
+                        break;
+                    }
+                case (StopBits):
+                    {
+                        if (Int32.TryParse(paraValue, out this.stopBits) == true)
+                        {
+                            this.serialPortInstance.StopBits = (StopBits)this.stopBits;
                             result = true;
                         }
                         break;

@@ -10,7 +10,7 @@ namespace VoidLibrary.Utils
     /*---------------yyzq.net--------------------------*/
     /*---------------tczhuoyou.com---------------------*
     /*任何个人均可免费修改，使用本程序，但请保留以上作者信息，谢谢！*/
-    internal static class CrcUtil
+    public static class CrcUtil
     {
         #region 校验和计算
         /// <summary>
@@ -214,19 +214,24 @@ namespace VoidLibrary.Utils
         /// <param name="Cmd">命令数组</param>
         /// <param name="IsHighBefore">高位是否在前</param>
         /// <returns></returns>
-        public static byte[] GetCRC16Full(byte[] Cmd, bool IsHighBefore)
+        public static byte[] GetCRC16Full(byte[] Cmd, bool IsHighBefore, bool cmd_is_full = false)
         {
+            int cmd_len = Cmd.Length - (cmd_is_full ? 2 : 0);
+            // // 高低位有问题
             int index;
             int crc_Low = 0xFF;
             int crc_High = 0xFF;
-            for (int i = 0; i < Cmd.Length; i++)
+            for (int i = 0; i < cmd_len; i++)
             {
                 index = crc_High ^ (char)Cmd[i];
                 crc_High = crc_Low ^ CRCHigh[index];
                 crc_Low = (byte)CRCLow[index];
             }
-            byte[] newCmd = new byte[Cmd.Length + 2];
-            Array.Copy(Cmd, newCmd, Cmd.Length);//复制原命令
+            byte[] newCmd = cmd_is_full ? Cmd : new byte[Cmd.Length + 2];
+            if (!cmd_is_full)
+            {
+                Array.Copy(Cmd, newCmd, Cmd.Length);//复制原命令
+            }
             if (IsHighBefore == true)
             {
                 newCmd[newCmd.Length - 2] = (byte)crc_High;
