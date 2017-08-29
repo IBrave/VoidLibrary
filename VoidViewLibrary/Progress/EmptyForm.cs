@@ -92,9 +92,13 @@ namespace SocketHelperDemo.View
             FormBorderStyle = FormBorderStyle.None;
         }
 
-        public static EmptyForm CreateEmptyForm(Form parent, string msg, MessageBoxButtons messageBoxButtons = MessageBoxButtons.OKCancel)
+        public static EmptyForm CreateEmptyForm(Form parent, string msg, MessageBoxButtons messageBoxButtons = MessageBoxButtons.OKCancel, Icon icon = null)
         {
             EmptyForm empty_form = new EmptyForm();
+            if (icon != null)
+            {
+                empty_form.Icon = null;
+            }
             empty_form.ShowAtLocation(msg, messageBoxButtons);
             empty_form.StartPosition = FormStartPosition.CenterScreen;
             empty_form.FormBorderStyle = FormBorderStyle.None;
