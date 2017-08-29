@@ -1,4 +1,72 @@
-﻿using System;
+﻿//                                                                        101010101010101010101010101010101                                                    
+//                                                                    10101010101010101010101010101010101010101010                                             
+//                                                       101      10101010101010101010101010101010101010101010101010                                           
+//                                               1       1010101010101010101010101010101010101010101010101010101010101                                         
+//                                               1     10101010101010101010101010101010101010101010101010101010101010 1                                        
+//                                             1     1010101010101010101010101010101010101010101010101010101010101010 1010                                     
+//                                            1    1010101010101010101010101010101010101010101010101010101010101010101010101                                   
+//                                          10    1010101010101010101010101010101010101010101010101010101010101010101010101010                                 
+//                                         10    101010101010101010101010101010101010101010101010101010101010101010101010101010                                
+//                                         10    101010101010101010101010101010101010101010101010101010101010101010101010101010                                
+//                                        10     101010101010101010101010101010101010101010101010101010101010101010101010101010                                
+//                                       101 010101010101010101010101010101010101010        10101010101010101010101010101010101                                
+//                                       10  101010101010101010101010101010101010             10101010101010101010101010101010                                 
+//                                       10  101010101010101010101010101010101                 1010101010101010101010101010101                                 
+//                                      101  01010101010101010101010101010                               101010101010101010101                                 
+//                                      101  0101010101010101010101010                                     1010101010101010101010                              
+//                                      10101010101010101010101010                                            1010101010101010101                              
+//                                    101010 101010101010101010                                                101010101010101010                              
+//                                   10101010101010101010101                                                       10101010101010                              
+//                                   101010101010101010                                                               101010101010                             
+//                                  10101010101010                                                                      101010101                              
+//                                  1010101010101                                                                        101010101                             
+//                                 1010101010101        1010101010                                                       1010101010                            
+//                                 101010101010 1    101010101010101010                                                 10101010101                            
+//                                 101010101010                   10101010                                             101010101010                            
+//                                 10101010101                        10101010                                        1010101010101                            
+//                                101010101010                           10101010                                     1010101010101                            
+//                                101010101010             10 10101010       10101                                    1010101010101                            
+//                                 1010101010             1010  1010101010                        101010101010        101010101010                             
+//                                 101010101                 10101010101010                   10101010101010101010    10101010101                              
+//                                 101010101                    10101   10101                           1            101010101010                              
+//                                1010101010                           10101                                         101010101010                              
+//                               10101010101                                                   1010101010101         10101010101                               
+//                              101010101010                                                  10  1010101 0101      101010101010                               
+//                              1010101010101                                                 1  0101010  10101     1010101010101                              
+//                             10101010101010                                                         10101         1010101010101                              
+//                            101010101010101                                                                      1010101010101                               
+//                           1010101010101010                                                                      1010101010101                               
+//                          101010101010101010                                                                    101010101010                                 
+//                         1010101010101010101                                                                    10101010101                                  
+//                        101010101010101010101                                                                  101010101010                                  
+//                       1010101010101010101010                          1                                      1010101010101                                  
+//                      101010101010101010101010                                                              10101010101010                                   
+//                     1010101010101010101010101                                   10                        1010101010 1010                                   
+//                    101010101010101010101010101                                                           101010101                                          
+//                    1010101010101010101010101010                                                        1010101010                                           
+//                   101010101010101010101010101010             10                                       1010101010                                            
+//                  10101010101010101010101010101010              1010                                 1010101010                                              
+//                 10101010101010101010101010101010101              1010101  0101     1010           101010101                                                 
+//                1010101010101010101010101010101010101               1010101010101010             10101010                                                    
+//               101010101010101010101010101010101010 10                 101010101              10101010   10101010101010                                      
+//               10101010101010101010101010101010      10                                     101  01                    10101                                 
+//             101010101010101010101010101010101        101                                  10                               1010                             
+//            101010101010101010101010101010              101                            1010                                    1010                          
+//           101010101010101010101010101                     101                       101                                         1010                        
+//          101010101010101010101010                          1010                  1010                                              10                       
+//         1010101010101010101010                                10101       10101010                                                  10                      
+//        10101010101010101                                           1010101010                                                        10                     
+//        1010101010101                                                                                                                  10                    
+//       1010101010                                                                                                                       10                   
+//      10101010101                                                                                                                        10                  
+//     10101010                                                                                                                             10                 
+//     1010101                                                                                                                              10                 
+//    10101                                                                                                                                  1                 
+//   10                                                                                                                                      10                
+//  10                                                                                                                                       10                
+// 10                                                                                                                                         1                
+//1   
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -201,9 +269,49 @@ namespace VoidDBLibrary.Model
             return 1;
         }
 
+        public int InsertOrReplace(T entity)
+        {
+            StringBuilder paramKeyBuilder = new StringBuilder();
+            StringBuilder paramNameBuilder = new StringBuilder();
+
+            List<DbParameter> dbParameters = bindValues(entity);
+            for (int i = 0; i < dbParameters.Count; ++i)
+            {
+                paramKeyBuilder.Append(dbParameters[i].ParameterName).Append(",");
+                paramNameBuilder.Append("@" + dbParameters[i].ParameterName).Append(",");
+            }
+            if (dbParameters.Count > 0)
+            {
+                paramKeyBuilder.Remove(paramKeyBuilder.Length - 1, 1);
+                paramNameBuilder.Remove(paramNameBuilder.Length - 1, 1);
+            }
+
+            string cmdText = String.Format("INSERT OR REPLACE INTO {0} ({1}) VALUES ({2})", TableName, paramKeyBuilder.ToString(), paramNameBuilder.ToString());
+            Console.WriteLine(cmdText);
+
+            DateTime h = DateTime.Now;
+            senssion.ExecuteNonQuery(cmdText, dbParameters.ToArray());
+            Console.WriteLine((DateTime.Now - h).TotalMilliseconds);
+            return 1;
+        }
+
         public int Insert(List<T> entityList)
         {
-            return 0;
+            Object transaction = senssion.Begin();
+            try
+            {
+                int count = entityList.Count;
+                for (int i = 0; i < count; ++i)
+                {
+                    Insert(entityList[i]);
+                }
+                senssion.Commit(transaction);
+            }
+            catch (Exception e)
+            {
+                senssion.Rollback(transaction);
+            }
+            return entityList.Count;
         }
 
         public int Update(T entity)
@@ -221,7 +329,7 @@ namespace VoidDBLibrary.Model
             }
             string cmdText = String.Format("UPDATE {0} SET {1} WHERE {2}", TableName, paramKeyBuilder.ToString(), "id=" + entity.id);
 
-            return VoidSqlite3Helper.Instance.ExecuteNonQuery(cmdText, dbParameters.ToArray());
+            return senssion.Instance.ExecuteNonQuery(cmdText, dbParameters.ToArray());
         }
 
         public int Update(List<T> entityList)
@@ -232,13 +340,19 @@ namespace VoidDBLibrary.Model
         public int Delete(T entity)
         {
             string cmdText = String.Format("DELETE FROM {0} WHERE {1}", TableName, "id=" + entity.id);
-            return VoidSqlite3Helper.Instance.ExecuteNonQuery(cmdText);
+            return senssion.Instance.ExecuteNonQuery(cmdText);
+        }
+
+        public int DeleteAll()
+        {
+            string cmdText = String.Format("DELETE FROM {0}", TableName);
+            return senssion.Instance.ExecuteNonQuery(cmdText);
         }
 
         public List<T> QueryAll()
         {
             string cmdText = String.Format("SELECT * FROM {0}", TableName);
-            DbDataReader dbDataReader = VoidSqlite3Helper.Instance.ExecuteReader(cmdText);
+            DbDataReader dbDataReader = senssion.Instance.ExecuteReader(cmdText);
             List<T> studentList = Parse<T>(dbDataReader);
             return studentList;
         }
@@ -246,7 +360,7 @@ namespace VoidDBLibrary.Model
         public List<T> Query(int id)
         {
             string cmdText = String.Format("SELECT * FROM {0} WHERE {1}", TableName, "id=" + id);
-            DbDataReader dbDataReader = VoidSqlite3Helper.Instance.ExecuteReader(cmdText);
+            DbDataReader dbDataReader = senssion.Instance.ExecuteReader(cmdText);
             List<T> studentList = Parse<T>(dbDataReader);
             return studentList;
         }
@@ -314,6 +428,11 @@ namespace VoidDBLibrary.Model
                     // Console.WriteLine(dataTypeName);
                 }
                 entityList.Add(entity);
+            }
+
+            if (dbDataReader != null)
+            {
+                dbDataReader.Close();
             }
 
             return entityList;

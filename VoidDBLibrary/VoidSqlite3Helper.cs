@@ -1,4 +1,72 @@
-﻿using System;
+﻿//                                                                        101010101010101010101010101010101                                                    
+//                                                                    10101010101010101010101010101010101010101010                                             
+//                                                       101      10101010101010101010101010101010101010101010101010                                           
+//                                               1       1010101010101010101010101010101010101010101010101010101010101                                         
+//                                               1     10101010101010101010101010101010101010101010101010101010101010 1                                        
+//                                             1     1010101010101010101010101010101010101010101010101010101010101010 1010                                     
+//                                            1    1010101010101010101010101010101010101010101010101010101010101010101010101                                   
+//                                          10    1010101010101010101010101010101010101010101010101010101010101010101010101010                                 
+//                                         10    101010101010101010101010101010101010101010101010101010101010101010101010101010                                
+//                                         10    101010101010101010101010101010101010101010101010101010101010101010101010101010                                
+//                                        10     101010101010101010101010101010101010101010101010101010101010101010101010101010                                
+//                                       101 010101010101010101010101010101010101010        10101010101010101010101010101010101                                
+//                                       10  101010101010101010101010101010101010             10101010101010101010101010101010                                 
+//                                       10  101010101010101010101010101010101                 1010101010101010101010101010101                                 
+//                                      101  01010101010101010101010101010                               101010101010101010101                                 
+//                                      101  0101010101010101010101010                                     1010101010101010101010                              
+//                                      10101010101010101010101010                                            1010101010101010101                              
+//                                    101010 101010101010101010                                                101010101010101010                              
+//                                   10101010101010101010101                                                       10101010101010                              
+//                                   101010101010101010                                                               101010101010                             
+//                                  10101010101010                                                                      101010101                              
+//                                  1010101010101                                                                        101010101                             
+//                                 1010101010101        1010101010                                                       1010101010                            
+//                                 101010101010 1    101010101010101010                                                 10101010101                            
+//                                 101010101010                   10101010                                             101010101010                            
+//                                 10101010101                        10101010                                        1010101010101                            
+//                                101010101010                           10101010                                     1010101010101                            
+//                                101010101010             10 10101010       10101                                    1010101010101                            
+//                                 1010101010             1010  1010101010                        101010101010        101010101010                             
+//                                 101010101                 10101010101010                   10101010101010101010    10101010101                              
+//                                 101010101                    10101   10101                           1            101010101010                              
+//                                1010101010                           10101                                         101010101010                              
+//                               10101010101                                                   1010101010101         10101010101                               
+//                              101010101010                                                  10  1010101 0101      101010101010                               
+//                              1010101010101                                                 1  0101010  10101     1010101010101                              
+//                             10101010101010                                                         10101         1010101010101                              
+//                            101010101010101                                                                      1010101010101                               
+//                           1010101010101010                                                                      1010101010101                               
+//                          101010101010101010                                                                    101010101010                                 
+//                         1010101010101010101                                                                    10101010101                                  
+//                        101010101010101010101                                                                  101010101010                                  
+//                       1010101010101010101010                          1                                      1010101010101                                  
+//                      101010101010101010101010                                                              10101010101010                                   
+//                     1010101010101010101010101                                   10                        1010101010 1010                                   
+//                    101010101010101010101010101                                                           101010101                                          
+//                    1010101010101010101010101010                                                        1010101010                                           
+//                   101010101010101010101010101010             10                                       1010101010                                            
+//                  10101010101010101010101010101010              1010                                 1010101010                                              
+//                 10101010101010101010101010101010101              1010101  0101     1010           101010101                                                 
+//                1010101010101010101010101010101010101               1010101010101010             10101010                                                    
+//               101010101010101010101010101010101010 10                 101010101              10101010   10101010101010                                      
+//               10101010101010101010101010101010      10                                     101  01                    10101                                 
+//             101010101010101010101010101010101        101                                  10                               1010                             
+//            101010101010101010101010101010              101                            1010                                    1010                          
+//           101010101010101010101010101                     101                       101                                         1010                        
+//          101010101010101010101010                          1010                  1010                                              10                       
+//         1010101010101010101010                                10101       10101010                                                  10                      
+//        10101010101010101                                           1010101010                                                        10                     
+//        1010101010101                                                                                                                  10                    
+//       1010101010                                                                                                                       10                   
+//      10101010101                                                                                                                        10                  
+//     10101010                                                                                                                             10                 
+//     1010101                                                                                                                              10                 
+//    10101                                                                                                                                  1                 
+//   10                                                                                                                                      10                
+//  10                                                                                                                                       10                
+// 10                                                                                                                                         1                
+//1   
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -17,6 +85,8 @@ namespace VoidDBLibrary
     {
         private SQLiteConnection connection;
 
+        private bool _use_app_confi_dir;
+
         public SQLiteConnection SQLiteConnection
         {
             set { connection = value; }
@@ -27,11 +97,41 @@ namespace VoidDBLibrary
             Instance = this;
         }
 
-        public static SQLiteConnection CreateConnection(string fileNameNoExtension)
+        public void UseConfig(bool use_config_dir)
+        {
+            _use_app_confi_dir = use_config_dir;
+        }
+
+        public static string GetDBDir(string child_dir = null)
         {
             DBConfig dbConfig = new DBConfig();
             string[] configs = dbConfig.Sqlite3Config;
             string db_dir = configs[configs.Length - 1];
+            if (child_dir != null)
+            {
+                db_dir = Path.Combine(db_dir, child_dir);
+            }
+            if (!Directory.Exists(db_dir))
+            {
+                Directory.CreateDirectory(db_dir);
+            }
+
+            return db_dir;
+        }
+
+        public SQLiteConnection CreateConnection(string fileNameNoExtension, string child_dir = null)
+        {
+            DBConfig dbConfig = new DBConfig();
+            string[] configs = dbConfig.Sqlite3Config;
+            string db_dir = configs[configs.Length - 1];
+            if (_use_app_confi_dir)
+            {
+                db_dir = Path.Combine(Directory.GetCurrentDirectory(), "config_dir");
+            }
+            if (child_dir != null)
+            {
+                db_dir = Path.Combine(db_dir, child_dir);
+            }
             if (!Directory.Exists(db_dir))
             {
                 Directory.CreateDirectory(db_dir);
@@ -45,24 +145,24 @@ namespace VoidDBLibrary
             return new SQLiteConnection(string.Format("Data Source={0};Version=3;", dbPath));
         }
 
-        public Object Begin()
+        public override Object Begin()
         {
             return connection.BeginTransaction();
         }
 
-        public void Commit(object obj)
+        public override void Commit(object obj)
         {
             ((SQLiteTransaction)obj).Commit();
         }
 
-        public void Rollback(object obj)
+        public override void Rollback(object obj)
         {
             ((SQLiteTransaction)obj).Rollback();
         }
 
-        public override void Create(string fileNameNoExtension)
+        public override void Create(string fileNameNoExtension, string child_dir_name = null)
         {
-            connection = CreateConnection(fileNameNoExtension);
+            connection = CreateConnection(fileNameNoExtension, child_dir_name);
         }
 
         public override void Open()
@@ -161,25 +261,21 @@ namespace VoidDBLibrary
 
         public override DbDataReader ExecuteReader(string commandText)
         {
-            using (SQLiteCommand command = new SQLiteCommand(connection))
-            {
-                command.CommandText = commandText;
-                return command.ExecuteReader();
-            }
+            SQLiteCommand command = new SQLiteCommand(connection);
+            command.CommandText = commandText;
+            return command.ExecuteReader();
         }
 
         public override DbDataReader ExecuteReader(string commandText, params DbParameter[] parameters)
         {
-            using (SQLiteCommand command = new SQLiteCommand(connection))
+            SQLiteCommand command = new SQLiteCommand(connection);
+            command.CommandText = commandText;
+            if (parameters != null && parameters.Length != 0)
             {
-                command.CommandText = commandText;
-                if (parameters != null && parameters.Length != 0)
-                {
-                    command.Parameters.AddRange(parameters);
-                }
-
-                return command.ExecuteReader();
+                command.Parameters.AddRange(parameters);
             }
+
+            return command.ExecuteReader();
         }
 
         public override DbParameter CreateParameter(string key, object value, DbType type)
