@@ -5,7 +5,11 @@ using VoidViewLibrary.View.Helper;
 
 namespace VoidViewLibrary.Progress
 {
+#if DEV_EXPRESS_ON
+    public partial class IndeterminateProgress : DevExpress.XtraEditors.XtraForm
+#else
     public partial class IndeterminateProgress : Form
+#endif
     {
         private Timer _watch_async_result_timer;
         private DateTime _start_time;
@@ -41,6 +45,16 @@ namespace VoidViewLibrary.Progress
             init(waitMessage, false, _no_wait_time, method);
         }
 
+        public IndeterminateProgress()
+        {
+            InitializeComponent();
+        }
+
+        public void Init(string waitMessage, EventHandler<EventArgs> method)
+        {
+            init(waitMessage, false, _no_wait_time, method);
+        }
+
         private void init(string waitMessage, bool cancelEnable, int maxWaitTime, EventHandler<EventArgs> method)
         {
             this.components = new System.ComponentModel.Container();
@@ -68,7 +82,15 @@ namespace VoidViewLibrary.Progress
             _rp_progress_dialog.Location = new Point(0, 0);
             _rp_progress_dialog.Size = Size;
             _form_control = _rp_progress_dialog;
+#if DEV_EXPRESS_ON
+            new EdgeShadowHelper(_form_control).Add_Paint().GetBackColor();
+#else
             BackColor = new EdgeShadowHelper(_form_control).Add_Paint().GetBackColor();
+#endif
+
+            //_rp_progress_dialog.LookAndFeel.SkinName = LookAndFeel.SkinName;
+            //_rp_progress_dialog.LookAndFeel.UseDefaultLookAndFeel = LookAndFeel.UseDefaultLookAndFeel;
+
         }
 
         private void initEvents()

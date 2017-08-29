@@ -6,7 +6,11 @@ using VoidViewLibrary.View.Helper;
 
 namespace VoidViewLibrary.View
 {
+#if DEV_EXPRESS_ON
+    public partial class PopupWindow : DevExpress.XtraEditors.XtraUserControl
+#else
     public partial class PopupWindow : UserControl
+#endif
     {
         public delegate void PopupWindowResultListener(DialogResult dialogResult);
         public PopupWindowResultListener popupWindowResultListener;
@@ -19,6 +23,8 @@ namespace VoidViewLibrary.View
 
             new EdgeShadowHelper(this).Add_Paint();
             new MoveControlAtParentControlHelper(this);
+
+            BackColor = Color.Transparent;
         }
 
         // 先添加控件后调整控件
@@ -65,7 +71,10 @@ namespace VoidViewLibrary.View
             int msg_text_height = (int)(row * sizeF.Height);
             labelControl.Size = new System.Drawing.Size(innerMaxWidth, msg_text_height);
             labelControl.Location = new System.Drawing.Point((popupWindowWidth - innerMaxWidth) / 2, top);
+#if DEV_EXPRESS_ON
+#else
             labelControl.BackColor = Color.FromArgb(255, 225, 225, 225);
+#endif
             if (row == 1)
             {
                 labelControl.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
@@ -84,7 +93,6 @@ namespace VoidViewLibrary.View
 
             Location = new Point(x, y);
 
-            BackColor = Color.Transparent;//Color.FromArgb(0, 225, 225, 225);//Color.FromArgb(0, Color.Red);
             ResumeLayout(false);
             SuspendLayout();
 
@@ -112,6 +120,9 @@ namespace VoidViewLibrary.View
 
                 simple_btn.Click += new EventHandler(Btn_Click);
             }
+
+            labelControl.LookAndFeel.SkinName = ((XtraUserControl)labelControl.Parent).LookAndFeel.SkinName;
+            labelControl.LookAndFeel.UseDefaultLookAndFeel = ((XtraUserControl)labelControl.Parent).LookAndFeel.UseDefaultLookAndFeel;
         }
 
         private void Btn_Click(object obj, EventArgs e)

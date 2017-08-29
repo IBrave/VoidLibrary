@@ -5,7 +5,11 @@ using VoidViewLibrary.View.Helper;
 
 namespace SocketHelperDemo.View
 {
+#if DEV_EXPRESS_ON
+    public partial class LoadingProgress : DevExpress.XtraEditors.XtraForm
+#else
     public partial class LoadingProgress : Form
+#endif
     {
         public delegate void CheckValue();
         public delegate void ButtonEvent(DialogResult dialogResult);
@@ -23,6 +27,7 @@ namespace SocketHelperDemo.View
         public LoadingProgress()
         {
             InitializeComponent();
+
             _draw_rotate_circle_helper = new DrawRotateCircleHelper(_picture_box);
 
             Closed += new EventHandler(Closed_Click);
@@ -37,7 +42,11 @@ namespace SocketHelperDemo.View
             _picture_box.BackColor = back_color;
             _label_hint_msg.BackColor = back_color;
 
+#if DEV_EXPRESS_ON
+            BackColor = Color.Transparent;
+#else
             BackColor = back_color;
+#endif
 
             _draw_rotate_circle_helper.Start();
         }

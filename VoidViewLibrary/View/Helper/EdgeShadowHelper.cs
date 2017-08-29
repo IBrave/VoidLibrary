@@ -18,7 +18,11 @@ namespace VoidViewLibrary.View.Helper
         {
             _add_edge_control = add_edge_control;
 
+#if DEV_EXPRESS_ON
+            _back_color = add_edge_control.BackColor;
+#else
             _back_color = Color.FromArgb(255, 225, 225, 225);
+#endif
             _solid_brush = new System.Drawing.SolidBrush(_back_color);
         }
 
