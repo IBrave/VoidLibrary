@@ -34,6 +34,7 @@
     <Reference Include="DevExpress.Printing.v14.2.Core, Version=14.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Utils.v14.2, Version=14.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraEditors.v14.2, Version=14.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v14.2, Version=14.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -45,9 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\GridViewHelper.cs" />
     <Compile Include="Controller\ViewLayoutController.cs" />
     <Compile Include="Controller\WatchTextController.cs" />
     <Compile Include="Entity\ViewLayoutObj.cs" />
+    <Compile Include="Helper\FormHelper.cs" />
+    <Compile Include="Helper\TabControlHelper.cs" />
+    <Compile Include="Progress\EmptyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Progress\EmptyForm.designer.cs">
+      <DependentUpon>EmptyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Progress\LoadingProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +82,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Progress\EmptyForm.resx">
+      <DependentUpon>EmptyForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Progress\LoadingProgress.resx">
       <DependentUpon>LoadingProgress.cs</DependentUpon>
     </EmbeddedResource>

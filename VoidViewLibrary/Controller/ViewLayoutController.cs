@@ -87,6 +87,8 @@ namespace VoidViewLibrary.Controller
         private List<ViewLayoutObj> viewLayoutObjList;
         private WatchTextController watchTextController;
 
+        private int unit_max_width = 0;
+
         public ViewLayoutController(WatchTextController watch_text_controller)
         {
             watchTextController = watch_text_controller;
@@ -101,7 +103,7 @@ namespace VoidViewLibrary.Controller
             for (int i = 0; i < viewLayoutObjList.Count; ++i)
             {
                 viewLayoutObjList[i].total_width = x * 2;
-                y += CreateItemControl(panelControl, x, y, viewLayoutObjList[i], i);
+                y += CreateItemControl(panelControl, x, y, viewLayoutObjList[i], i, i == 0 ? viewLayoutObjList : null);
                 y += 2;
                 max_width = Math.Max(viewLayoutObjList[i].total_width, max_width);
             }
@@ -123,7 +125,7 @@ namespace VoidViewLibrary.Controller
             get { return viewLayoutObjList; }
         }
 
-        public void UpdatePanelControlLabel(Control.ControlCollection parentControlCollection, PanelControl panelControl, string panelName, int location = -1)
+        public LabelControl UpdatePanelControlLabel(Control.ControlCollection parentControlCollection, PanelControl panelControl, string panelName, int location = -1)
         {
             LabelControl labelControl = new LabelControl();
             Graphics graphics = labelControl.CreateGraphics();
@@ -148,12 +150,14 @@ namespace VoidViewLibrary.Controller
 
             parentControlCollection.Add(labelControl);
             labelControl.BringToFront();
+
+            return labelControl;
         }
 
-        private int CreateItemControl(PanelControl panelControl, int x, int y, ViewLayoutObj viewLayoutObj, int index)
+        private int CreateItemControl(PanelControl panelControl, int x, int y, ViewLayoutObj viewLayoutObj, int index, List<ViewLayoutObj> view_obj_list = null)
         {
-            int LabelHeight = 14, LabelWidth = 140;
-            int EditHeight = 20, EditWidth = 84;
+            int LabelHeight = 14, LabelWidth = viewLayoutObj.label_width == 0 ? 140 : viewLayoutObj.label_width;
+            int EditHeight = 20, EditWidth = viewLayoutObj.edit_width == 0 ? 84 : viewLayoutObj.edit_width;
             int distanceY = (EditHeight - LabelHeight) / 2;
 
             LabelControl labelControl = new LabelControl();
@@ -178,15 +182,15 @@ namespace VoidViewLibrary.Controller
 
             textEdit.Location = new System.Drawing.Point(x, y);
             textEdit.Name = "textEdit";
-            textEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            textEdit.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            //textEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            //textEdit.RightToLeft = System.Windows.Forms.RightToLeft.No;
             textEdit.Size = new System.Drawing.Size(EditWidth, EditHeight);
             textEdit.TabIndex = index + 1;
             textEdit.ReadOnly = viewLayoutObj.read_only;
-            textEdit.Enabled = !viewLayoutObj.read_only;
+            // textEdit.Enabled = !viewLayoutObj.read_only;
             SetViewState(textEdit, viewLayoutObj);
             textEdit.Text = viewLayoutObj.default_value;
-            if (textEdit.Enabled)
+            if (!textEdit.ReadOnly)
             {
                 if (watchTextController != null)
                 {
@@ -196,10 +200,29 @@ namespace VoidViewLibrary.Controller
             }
             else
             {
-                textEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+                //textEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
             }
 
             viewLayoutObj.total_width += labelControl.Size.Width + textEdit.Size.Width;
+
+            if (view_obj_list != null)
+            {
+                unit_max_width = view_obj_list[0].unit_width;
+                if (unit_max_width == 0)
+                {
+                    LabelControl unitLabelControl = new LabelControl();
+
+                    for (int i = view_obj_list.Count - 1; i >= 0; --i)
+                    {
+                        if (view_obj_list[i].unit != null && view_obj_list[i].unit.Length != 0)
+                        {
+                            Graphics graphics = unitLabelControl.CreateGraphics();
+                            SizeF sizeF = graphics.MeasureString(view_obj_list[i].unit, unitLabelControl.Font);
+                            unit_max_width = (int)Math.Max(sizeF.Width + 2, unit_max_width);
+                        }
+                    }
+                }
+            }
 
             if (viewLayoutObj.unit != null && viewLayoutObj.unit.Length != 0) // 吴宇森
             {
@@ -209,7 +232,7 @@ namespace VoidViewLibrary.Controller
 
                 Graphics graphics = unitLabelControl.CreateGraphics();
                 SizeF sizeF = graphics.MeasureString(viewLayoutObj.unit, unitLabelControl.Font);
-                int width = 20;//(int) sizeF.Width + 2;
+                int width = unit_max_width;//(int) sizeF.Width + 2;
                 int height = (int) sizeF.Height + 2;
 
 
@@ -225,6 +248,10 @@ namespace VoidViewLibrary.Controller
                 viewLayoutObj.total_width += width;
 
                 viewLayoutObj.label_unit = unitLabelControl;
+            }
+            else
+            {
+                viewLayoutObj.total_width += unit_max_width;
             }
 
 
@@ -259,6 +286,11 @@ namespace VoidViewLibrary.Controller
                         textEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
                     }
                     
+                    break;
+                case "RegEx":
+                    textEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
+                    textEdit.Properties.Mask.EditMask = viewLayoutObj.edit_mask;
+                    textEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
                     break;
             }
         }
@@ -314,6 +346,15 @@ namespace VoidViewLibrary.Controller
                             break;
                         case "unit":
                             viewLayoutObj.unit = value;
+                            break;
+                        case "label_width":
+                            int.TryParse(value, out viewLayoutObj.label_width);
+                            break;
+                        case "edit_width":
+                            int.TryParse(value, out viewLayoutObj.edit_width);
+                            break;
+                        case "unit_width":
+                            int.TryParse(value, out viewLayoutObj.unit_width);
                             break;
                         case "read_only":
                             bool.TryParse(value, out viewLayoutObj.read_only);

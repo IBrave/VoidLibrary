@@ -66,188 +66,34 @@
 //  10                                                                                                                                       10                
 // 10                                                                                                                                         1                
 //1   
+using DevExpress.XtraTab;
 using System;
-using System.Drawing;
-using System.Windows.Forms;
-using VoidViewLibrary.View.Helper;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SocketHelperDemo.View
+namespace VoidViewLibrary.Helper
 {
-#if DEV_EXPRESS_ON
-    public partial class LoadingProgress : DevExpress.XtraEditors.XtraForm
-#else
-    public partial class LoadingProgress : Form
-#endif
+    public class TabControlHelper
     {
-        public delegate void CheckValue();
-        public delegate void ButtonEvent(DialogResult dialogResult);
-
-        private float _circleSize = 0.8f;
-
-        private Timer _check_method_timer;
-        private CheckValue _check_method;
-        private bool _ignore_inner_check_method_timeout_invok_close_event;
-
-        public ButtonEvent _timeout_button_event;
-
-        private DrawRotateCircleHelper _draw_rotate_circle_helper;
-
-        public LoadingProgress()
+        public static XtraTabControl CreateTabControl()
         {
-            InitializeComponent();
+            DevExpress.XtraTab.XtraTabPage xtraTabPage = new XtraTabPage();
 
-            _draw_rotate_circle_helper = new DrawRotateCircleHelper(_picture_box);
+            XtraTabControl xtra_tab_control = new DevExpress.XtraTab.XtraTabControl();
+            xtra_tab_control.Location = new System.Drawing.Point(12, 12);
+            xtra_tab_control.Name = "_xtra_tab_control";
+            xtra_tab_control.SelectedTabPage = xtraTabPage;
+            xtra_tab_control.Size = new System.Drawing.Size(300, 181);
+            xtra_tab_control.TabIndex = 3;
 
-            Closed += new EventHandler(Closed_Click);
-            this._btn_yes.DialogResult = DialogResult.Yes;
-            this._btn_no.DialogResult = DialogResult.No;
+            xtra_tab_control.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
+            xtraTabPage});
 
-            Color back_color = new EdgeShadowHelper(this).Add_Paint().GetBackColor();
+            // xtraTabPage.Controls.Add();
 
-            FormBorderStyle = FormBorderStyle.None;
-            BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-
-            _picture_box.BackColor = back_color;
-            _label_hint_msg.BackColor = back_color;
-
-#if DEV_EXPRESS_ON
-            BackColor = Color.Transparent;
-#else
-            BackColor = back_color;
-#endif
-
-            _draw_rotate_circle_helper.Start();
-        }
-
-        public static LoadingProgress ShowProgress(Form parent)
-        {
-            LoadingProgress loading = new LoadingProgress();
-            loading.StartPosition = FormStartPosition.CenterScreen;
-            loading.FormBorderStyle = FormBorderStyle.FixedDialog;
-            if (parent != null)
-            {
-                loading.Owner = parent;
-            }
-            return loading;
-        }
-
-        public Color CircleColor
-        {
-            get { return _draw_rotate_circle_helper.CircleColor; }
-            set
-            {
-                _draw_rotate_circle_helper.CircleColor = value;
-                Invalidate();
-            }
-        }
-
-        public float CircleSize
-        {
-            get { return _circleSize; }
-            set
-            {
-                if (value <= 0.0F)
-                    _circleSize = 0.05F;
-                else
-                    _circleSize = value > 4.0F ? 4.0F : value;
-                Invalidate();
-            }
-        }
-
-        public CheckValue CheckMethod
-        {
-            get { return _check_method; }
-            set
-            {
-                _check_method = value;
-                if (_check_method_timer == null)
-                {
-                    _check_method_timer = new Timer();
-                    _check_method_timer.Tick += new EventHandler(Timer_CheckValue);
-                    _check_method_timer.Interval = 1000;
-                    _check_method_timer.Start();
-                }
-            }
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            SetNewSize();
-            base.OnResize(e);
-        }
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            SetNewSize();
-            base.OnSizeChanged(e);
-        }
-
-        private void SetNewSize()
-        {
-            // int size = Math.Max(Width, Height);
-            // Size = new Size(size, size);
-        }
-
-        private void Timer_CheckValue(object sender, EventArgs e)
-        {
-            if (_check_method != null)
-            {
-                _check_method.Invoke();
-            }
-        }
-
-        
-
-        public void Notify_Finished()
-        {
-            if (_check_method_timer != null)
-            {
-                _check_method_timer.Stop();
-            }
-            _draw_rotate_circle_helper.Stop();
-            this._btn_yes.PerformClick();
-            if (_timeout_button_event != null) _timeout_button_event(DialogResult.Yes);
-            _ignore_inner_check_method_timeout_invok_close_event = true;
-            Close();
-        }
-
-        public void Notify_Failed()
-        {
-            if (_check_method_timer != null)
-            {
-                _check_method_timer.Stop();
-            }
-            _draw_rotate_circle_helper.Stop();
-            this._btn_no.PerformClick();
-            if (_timeout_button_event != null) _timeout_button_event(DialogResult.No);
-            _ignore_inner_check_method_timeout_invok_close_event = true;
-            Close();
-        }
-
-        private void Closed_Click(object sender, EventArgs e)
-        {
-            if (_check_method_timer != null)
-            {
-                _check_method_timer.Stop();
-            }
-            _draw_rotate_circle_helper.Stop();
-            if (_ignore_inner_check_method_timeout_invok_close_event)
-            {
-            }
-            else
-            {
-                if (_timeout_button_event != null) _timeout_button_event(DialogResult.Cancel);
-            }
-        }
-
-        private void Yes_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void No_Click(object sender, EventArgs e)
-        {
-            Close();
+            return xtra_tab_control;
         }
     }
 }

@@ -66,6 +66,7 @@
 //  10                                                                                                                                       10                
 // 10                                                                                                                                         1                
 //1   
+using DevExpress.XtraEditors;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -74,100 +75,108 @@ using VoidViewLibrary.View.Helper;
 namespace SocketHelperDemo.View
 {
 #if DEV_EXPRESS_ON
-    public partial class LoadingProgress : DevExpress.XtraEditors.XtraForm
+    public partial class EmptyForm : DevExpress.XtraEditors.XtraForm
 #else
-    public partial class LoadingProgress : Form
+    public partial class EmptyForm : Form
 #endif
     {
-        public delegate void CheckValue();
-        public delegate void ButtonEvent(DialogResult dialogResult);
+        public delegate void DialogResultListener(DialogResult dialogResult);
+        public DialogResultListener _dialog_result_listener;
 
-        private float _circleSize = 0.8f;
-
-        private Timer _check_method_timer;
-        private CheckValue _check_method;
-        private bool _ignore_inner_check_method_timeout_invok_close_event;
-
-        public ButtonEvent _timeout_button_event;
-
-        private DrawRotateCircleHelper _draw_rotate_circle_helper;
-
-        public LoadingProgress()
+        private EmptyForm()
         {
             InitializeComponent();
-
-            _draw_rotate_circle_helper = new DrawRotateCircleHelper(_picture_box);
-
-            Closed += new EventHandler(Closed_Click);
-            this._btn_yes.DialogResult = DialogResult.Yes;
-            this._btn_no.DialogResult = DialogResult.No;
 
             Color back_color = new EdgeShadowHelper(this).Add_Paint().GetBackColor();
 
             FormBorderStyle = FormBorderStyle.None;
-            BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-
-            _picture_box.BackColor = back_color;
-            _label_hint_msg.BackColor = back_color;
-
-#if DEV_EXPRESS_ON
-            BackColor = Color.Transparent;
-#else
-            BackColor = back_color;
-#endif
-
-            _draw_rotate_circle_helper.Start();
         }
 
-        public static LoadingProgress ShowProgress(Form parent)
+        public static EmptyForm CreateEmptyForm(Form parent, string msg, MessageBoxButtons messageBoxButtons = MessageBoxButtons.OKCancel)
         {
-            LoadingProgress loading = new LoadingProgress();
-            loading.StartPosition = FormStartPosition.CenterScreen;
-            loading.FormBorderStyle = FormBorderStyle.FixedDialog;
+            EmptyForm empty_form = new EmptyForm();
+            empty_form.ShowAtLocation(msg, messageBoxButtons);
+            empty_form.StartPosition = FormStartPosition.CenterScreen;
+            empty_form.FormBorderStyle = FormBorderStyle.None;
             if (parent != null)
             {
-                loading.Owner = parent;
+                empty_form.Owner = parent;
             }
-            return loading;
+
+            return empty_form;
         }
 
-        public Color CircleColor
+        public void ShowAtLocation(string msg, MessageBoxButtons messageBoxButtons = MessageBoxButtons.OKCancel)
         {
-            get { return _draw_rotate_circle_helper.CircleColor; }
-            set
-            {
-                _draw_rotate_circle_helper.CircleColor = value;
-                Invalidate();
-            }
-        }
+            int Width = 300;
+            int Height = 180;
 
-        public float CircleSize
-        {
-            get { return _circleSize; }
-            set
-            {
-                if (value <= 0.0F)
-                    _circleSize = 0.05F;
-                else
-                    _circleSize = value > 4.0F ? 4.0F : value;
-                Invalidate();
-            }
-        }
+            int popupWindowWidth = (int)(Width * 0.8F);
+            int popupWindowHeight = (int)(popupWindowWidth * 0.618F);
+            Size = new Size(popupWindowWidth, popupWindowHeight);
 
-        public CheckValue CheckMethod
-        {
-            get { return _check_method; }
-            set
+            int innerMaxWidth = (int)(popupWindowWidth * 0.8F);
+            int left = (popupWindowWidth - innerMaxWidth) / 2;
+            int top = left;
+            int bottom = top;
+
+            LabelControl labelControl = new LabelControl();
+            labelControl.Name = "msgLabelControl";
+            labelControl.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            labelControl.AutoSizeMode = LabelAutoSizeMode.None;
+            labelControl.Text = msg;
+            Controls.Add(labelControl);
+            Graphics graphics = labelControl.CreateGraphics();
+            SizeF sizeF = graphics.MeasureString(labelControl.Text, labelControl.Font);
+            int row = (int)(sizeF.Width / innerMaxWidth + ((sizeF.Width % innerMaxWidth) != 0 ? 1 : 0));
+            int msg_text_height = (int)(row * sizeF.Height);
+            labelControl.Size = new System.Drawing.Size(innerMaxWidth, msg_text_height);
+            labelControl.Location = new System.Drawing.Point((popupWindowWidth - innerMaxWidth) / 2, top);
+#if DEV_EXPRESS_ON
+#else
+            labelControl.BackColor = Color.FromArgb(255, 225, 225, 225);
+#endif
+            if (row == 1)
             {
-                _check_method = value;
-                if (_check_method_timer == null)
-                {
-                    _check_method_timer = new Timer();
-                    _check_method_timer.Tick += new EventHandler(Timer_CheckValue);
-                    _check_method_timer.Interval = 1000;
-                    _check_method_timer.Start();
-                }
+                labelControl.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             }
+            labelControl.Location = new System.Drawing.Point((popupWindowWidth - innerMaxWidth) / 2, (popupWindowHeight - (bottom + 20) - msg_text_height) / 2);
+
+            int x = (Width - Size.Width) / 2;
+            int y = (Height - Size.Height) / 2;
+
+            Location = new Point(x, y);
+
+            ResumeLayout(false);
+            SuspendLayout();
+
+            int btn_width = 75;
+            int div_width = 20;
+            int btn_num = messageBoxButtons == MessageBoxButtons.OK ? 1 : 2;
+            int btn_div_width_sum = btn_width * btn_num + div_width * (btn_num - 1);
+            string[] btn_names = new string[] { "Ok", "Cancel" };
+            DialogResult[] dialog_results = new DialogResult[] {
+                DialogResult.OK, DialogResult.Cancel
+            };
+
+            for (int i = 0; i < btn_num; ++i)
+            {
+                SimpleButton simple_btn = new DevExpress.XtraEditors.SimpleButton();
+                simple_btn.Size = new System.Drawing.Size(btn_width, 23);
+                simple_btn.Location = new System.Drawing.Point((Size.Width - btn_div_width_sum) / 2 + btn_width * i + div_width * i, Size.Height - simple_btn.Size.Height - bottom);
+                simple_btn.Name = "btn_confirm";
+                simple_btn.TabIndex = btn_num - i;
+                simple_btn.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+                simple_btn.Text = btn_names[i];
+                simple_btn.DialogResult = dialog_results[i];
+
+                Controls.Add(simple_btn);
+
+                simple_btn.Click += new EventHandler(Btn_Click);
+            }
+
+            labelControl.LookAndFeel.SkinName = LookAndFeel.SkinName;
+            labelControl.LookAndFeel.UseDefaultLookAndFeel = LookAndFeel.UseDefaultLookAndFeel;
         }
 
         protected override void OnResize(EventArgs e)
@@ -188,65 +197,15 @@ namespace SocketHelperDemo.View
             // Size = new Size(size, size);
         }
 
-        private void Timer_CheckValue(object sender, EventArgs e)
+        private void Btn_Click(object obj, EventArgs e)
         {
-            if (_check_method != null)
+            SimpleButton btn = obj as SimpleButton;
+            Console.WriteLine(btn.DialogResult);
+            if (_dialog_result_listener != null)
             {
-                _check_method.Invoke();
+                _dialog_result_listener(btn.DialogResult);
             }
-        }
 
-        
-
-        public void Notify_Finished()
-        {
-            if (_check_method_timer != null)
-            {
-                _check_method_timer.Stop();
-            }
-            _draw_rotate_circle_helper.Stop();
-            this._btn_yes.PerformClick();
-            if (_timeout_button_event != null) _timeout_button_event(DialogResult.Yes);
-            _ignore_inner_check_method_timeout_invok_close_event = true;
-            Close();
-        }
-
-        public void Notify_Failed()
-        {
-            if (_check_method_timer != null)
-            {
-                _check_method_timer.Stop();
-            }
-            _draw_rotate_circle_helper.Stop();
-            this._btn_no.PerformClick();
-            if (_timeout_button_event != null) _timeout_button_event(DialogResult.No);
-            _ignore_inner_check_method_timeout_invok_close_event = true;
-            Close();
-        }
-
-        private void Closed_Click(object sender, EventArgs e)
-        {
-            if (_check_method_timer != null)
-            {
-                _check_method_timer.Stop();
-            }
-            _draw_rotate_circle_helper.Stop();
-            if (_ignore_inner_check_method_timeout_invok_close_event)
-            {
-            }
-            else
-            {
-                if (_timeout_button_event != null) _timeout_button_event(DialogResult.Cancel);
-            }
-        }
-
-        private void Yes_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void No_Click(object sender, EventArgs e)
-        {
             Close();
         }
     }
